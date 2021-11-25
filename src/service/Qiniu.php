@@ -10,7 +10,7 @@ use Qiniu\Storage\UploadManager;
 
 class Qiniu implements Cloud
 {
-    public function cloud($file)
+    public function cloud($file,$config)
     {
         //本地的文件路径
         $localFilePath = $file['file']['tmp_name'];
@@ -24,11 +24,11 @@ class Qiniu implements Cloud
         $fileName .= $suffix;
 
         //上传七牛云业务逻辑
-        $accessKey = 'FNbcGeNVSydTXAmq5gpXwT0IMSYCGgBi4c3A3nvb'; //去控制台的秘钥管理拿AK
-        $secretKey = 'zA8AeRR0j9Tf1KlUgEcH6A0X4yBg1T5_Zq0kmi8Y';//去控制台的秘钥管理拿SK
+        $accessKey = $config['ak']; //去控制台的秘钥管理拿AK
+        $secretKey = $config['sk'];//去控制台的秘钥管理拿SK
         $auth = new Auth($accessKey, $secretKey);
         //七牛云桶名，根据自己实际进行填写
-        $bucket = '1904cdn';
+        $bucket = $config['bucket'];
         // 生成上传Token
         $token = $auth->uploadToken($bucket);
         // 构建 UploadManager 对象
@@ -36,15 +36,13 @@ class Qiniu implements Cloud
 
         // 调用 UploadManager 的 putFile 方法进行文件的上传。
         list($ret, $err) = $uploadMgr->putFile($token, $fileName, $localFilePath);
-
         //错误信息提示
         if ($err != null) {
             //可调整为错误页面
             $this->error('上传文件失败');
         }
-
         //把七牛云图片路径存储到我们自己的数据库  七牛云图片路径
-        $imageUrl = 'http://1904cdn.gaodw.cn/' . $fileName;
+        $imageUrl = $config['url'] . $fileName;
         //入库业务逻辑 create save 只有这两个模型方法才能自动写入时间戳
         print_r($imageUrl);
 //        $this->success('上传文件成功');
