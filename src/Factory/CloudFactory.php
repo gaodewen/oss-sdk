@@ -2,6 +2,7 @@
 namespace gaodewen\OssSdk\Factory;
 
 use gaodewen\OssSdk\Service\Qiniu;
+use gaodewen\OssSdk\service\TencentCloud;
 
 class CloudFactory
 {
@@ -16,7 +17,7 @@ class CloudFactory
                 $obj= new Qiniu();
                 break;
             case self::SMS_TENCENT:
-               return null;
+               $obj=new TencentCloud();
                 break;
             default:
                 return null;
