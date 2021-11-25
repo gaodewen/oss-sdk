@@ -1,5 +1,6 @@
 # oss-sdk
 oss云存储
+```php
  public function cloud(Request $request,CloudFactory $cloudFactory){
         //接收文件上传的值
         $file = $_FILES;
@@ -17,6 +18,7 @@ oss云存储
             return $res;
         }
     }
+```
 //上传类型为 
 'qiniu' 七牛云
 'tencent' 腾讯
